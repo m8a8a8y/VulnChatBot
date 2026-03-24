@@ -14,7 +14,12 @@ app = Flask(__name__, static_url_path='', static_folder='static')
 
 # Configure Groq client using environment variable
 api_key = os.getenv("GROQ_API_KEY")
-client = Groq(api_key=api_key)
+if not api_key:
+    print("WARNING: GROQ_API_KEY not found. AI features will be disabled.")
+    client = None
+else:
+    client = Groq(api_key=api_key)
+
 
 # --- Chatbot Backend Logic (adapted from chat.py) ---
 
