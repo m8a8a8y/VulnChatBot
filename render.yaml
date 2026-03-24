@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: vulnchatbot
+    env: docker
+    plan: free # or starter
+    region: oregon 
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false # User must set this manually in Render dashboard
+      - key: PORT
+        value: 5000
