@@ -15,10 +15,11 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Install searchsploit (exploitdb)
-RUN git clone https://github.com/offensive-security/exploitdb.git /opt/exploit-database \
+# Install searchsploit (exploitdb) - using shallow clone for performance
+RUN git clone --depth 1 https://github.com/offensive-security/exploitdb.git /opt/exploit-database \
     && ln -sf /opt/exploit-database/searchsploit /usr/local/bin/searchsploit \
     && cp -n /opt/exploit-database/.searchsploit_rc ~/
+
 
 # Install Python dependencies
 COPY requirements.txt .
