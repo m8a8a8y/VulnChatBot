@@ -1,0 +1,8 @@
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+.vscode/
+.idea/
+*.csv
+# Only ignore CSVs if you don't want to sync them, but .env is the critical one
