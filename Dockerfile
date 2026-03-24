@@ -8,18 +8,12 @@ ENV PYTHONUNBUFFERED 1
 # Set the working directory in the container
 WORKDIR /app
 
-# Install system dependencies
+# Install system dependencies (Lightweight)
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     build-essential \
     curl \
-    git \
     && rm -rf /var/lib/apt/lists/*
-
-# Install searchsploit (exploitdb) - using shallow clone for performance
-RUN git clone --depth 1 https://github.com/offensive-security/exploitdb.git /opt/exploit-database \
-    && ln -sf /opt/exploit-database/searchsploit /usr/local/bin/searchsploit \
-    && cp -n /opt/exploit-database/.searchsploit_rc ~/
 
 # Install Python dependencies
 COPY requirements.txt .
