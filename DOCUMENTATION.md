@@ -33,7 +33,7 @@ The project searches across 3 primary local datasets to remain fast and function
 
 ## 3. Core Features & AI Integration
 
-The intelligence of VulnChatBot is heavily driven by **Groq's LLaMA-3.3-70B-versatile inference endpoint**, giving it near-instant reasoning capabilities.
+The intelligence of VulnChatBot is driven by **Groq's LLaMA inference endpoints** (configured via `GROQ_MODEL`, defaulting to `llama-3.3-70b-versatile` with automatic fallback to `llama-3.1-70b-versatile`, `llama3-70b-8192`, and `llama3-8b-8192` in case of 404 / `model_not_found` errors), giving it near-instant reasoning capabilities.
 
 ### 3.1 Intuitive Database Searching
 When queried, the Bot automatically queries Metasploit, SSTI, and Exploit-DB. It utilizes `thefuzz` to conduct partial ratio string matching (Threshold: 60) for broad keyword discovery. Simultaneously, it triggers a `searchsploit` sub-process to pull live path results.
@@ -83,9 +83,9 @@ The Flask application exposes a concise API for the frontend JS:
    * Ensure `searchsploit` is installed functionally on your host system (comes pre-packaged mostly on Kali/Parrot OS), as `subprocess.run(['searchsploit'...])` assumes the binary is in your PATH.
    
 2. **Environment Configuration**:
-   VulnChatBot strictly reads your Groq API key from the `GROQ_API_KEY` environment variable for security.
+   VulnChatBot strictly reads your Groq API key from the `GROQ_API_KEY` environment variable for security and allows overriding the model name via `GROQ_MODEL`.
    *   **Local Development**: Create a `.env` file in the root directory (based on `.env.example`). This file is ignored by git to prevent accidental exposure of your keys.
-   *   **Production Hosting**: Professional hosting environments provide interfaces to set environment variables. Set `GROQ_API_KEY` there to keep it completely hidden from the codebase and the public.
+   *   **Production Hosting**: Professional hosting environments provide interfaces to set environment variables. Set `GROQ_API_KEY` (and optionally `GROQ_MODEL`) there to keep it completely hidden from the codebase and the public.
 
 
 3. **Running the Platform**:

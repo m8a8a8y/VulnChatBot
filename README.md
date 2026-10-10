@@ -33,8 +33,9 @@
     Local development: Create a `.env` file (use `.env.example` as a template):
     ```env
     GROQ_API_KEY=your_groq_api_key_here
+    GROQ_MODEL=llama-3.3-70b-versatile
     ```
-    Production/Hosting: Set the `GROQ_API_KEY` in your server's environment settings. (e.g. GitHub Secrets, Heroku Config Vars, etc.)
+    Production/Hosting: Set `GROQ_API_KEY` (and optionally `GROQ_MODEL`) in your server's environment settings. (e.g. GitHub Secrets, Heroku Config Vars, etc.) If the configured model is unavailable or encounters a `404 / model_not_found` error, VulnChatBot will automatically fall back to alternate available Groq models (such as `llama-3.1-70b-versatile`, `llama3-70b-8192`, `llama3-8b-8192`).
 
 4.  **Run the App**:
     *   **Web Version**: `python app.py` (Access at `http://127.0.0.1:5000`)
