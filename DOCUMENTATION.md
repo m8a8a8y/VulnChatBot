@@ -33,7 +33,7 @@ The project searches across 3 primary local datasets to remain fast and function
 
 ## 3. Core Features & AI Integration
 
-The intelligence of VulnChatBot is heavily driven by **Groq's LLaMA-3.3-70B-versatile inference endpoint**, giving it near-instant reasoning capabilities.
+The intelligence of VulnChatBot is heavily driven by **Groq's AI inference API** (defaulting to `openai/gpt-oss-120b`, configurable via the `GROQ_MODEL` environment variable), giving it near-instant reasoning capabilities.
 
 ### 3.1 Intuitive Database Searching
 When queried, the Bot automatically queries Metasploit, SSTI, and Exploit-DB. It utilizes `thefuzz` to conduct partial ratio string matching (Threshold: 60) for broad keyword discovery. Simultaneously, it triggers a `searchsploit` sub-process to pull live path results.
