@@ -21,6 +21,42 @@ else:
     client = Groq(api_key=api_key)
 
 
+def create_groq_completion(client, **kwargs):
+    """
+    Creates a chat completion using Groq client, with fallback models
+    if the requested model does not exist or access is denied (e.g. 404 / model_not_found).
+    """
+    env_model = os.getenv("GROQ_MODEL")
+    default_models = [
+        "llama-3.3-70b-versatile",
+        "llama-3.1-70b-versatile",
+        "llama3-70b-8192",
+        "llama3-8b-8192"
+    ]
+
+    models_to_try = []
+    if env_model:
+        models_to_try.append(env_model)
+    for m in default_models:
+        if m not in models_to_try:
+            models_to_try.append(m)
+
+    last_exception = None
+    for model_name in models_to_try:
+        try:
+            params = kwargs.copy()
+            params["model"] = model_name
+            return client.chat.completions.create(**params)
+        except Exception as e:
+            error_str = str(e)
+            if "model_not_found" in error_str or "404" in error_str or "does not exist" in error_str:
+                last_exception = e
+                continue
+            raise e
+    if last_exception:
+        raise last_exception
+
+
 # --- Chatbot Backend Logic (adapted from chat.py) ---
 
 def load_csv(filename):
@@ -162,8 +198,8 @@ def ask_ai_deep_search(query):
     """
     
     try:
-        completion = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+        completion = create_groq_completion(
+            client,
             messages=[
                 {"role": "system", "content": "You are a vulnerability research expert returning raw JSON data."},
                 {"role": "user", "content": prompt}
@@ -181,8 +217,8 @@ def ask_ai_deep_search(query):
 
 def ask_ai_api(query):
     try:
-        completion = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+        completion = create_groq_completion(
+            client,
             messages=[
                 {"role": "system", "content": "You are an AI assistant helping a pentester in a chatbot api can you respond in less than 5 sentances."},
                 {"role": "user", "content": query}
