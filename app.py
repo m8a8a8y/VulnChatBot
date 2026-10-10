@@ -163,7 +163,7 @@ def ask_ai_deep_search(query):
     
     try:
         completion = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model=os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"),
             messages=[
                 {"role": "system", "content": "You are a vulnerability research expert returning raw JSON data."},
                 {"role": "user", "content": prompt}
@@ -182,7 +182,7 @@ def ask_ai_deep_search(query):
 def ask_ai_api(query):
     try:
         completion = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model=os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"),
             messages=[
                 {"role": "system", "content": "You are an AI assistant helping a pentester in a chatbot api can you respond in less than 5 sentances."},
                 {"role": "user", "content": query}

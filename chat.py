@@ -89,7 +89,7 @@ def run_searchsploit(keyword):
 def ask_ai_api(query):
     try:
         completion = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model=os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"),
             messages=[
                 {"role": "system", "content": "You are an AI assistant helping a pentester in a chatbot api can you respond in less than 5 sentances."},
                 {"role": "user", "content": query}
