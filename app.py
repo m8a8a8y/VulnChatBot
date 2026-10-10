@@ -134,6 +134,32 @@ def run_searchsploit(keyword):
     except Exception as e:
         return {"raw_output": f"Error running searchsploit: {e}", "parsed_links": []}
 
+def create_chat_completion_with_fallback(client, **kwargs):
+    default_model = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+    models_to_try = list(dict.fromkeys([
+        default_model,
+        "llama-3.3-70b-versatile",
+        "llama-3.1-70b-versatile",
+        "llama3-70b-8192",
+        "llama3-8b-8192"
+    ]))
+
+    last_exception = None
+    for model in models_to_try:
+        try:
+            kwargs['model'] = model
+            return client.chat.completions.create(**kwargs)
+        except Exception as e:
+            last_exception = e
+            err_msg = str(e).lower()
+            status_code = getattr(e, 'status_code', None)
+            is_404 = status_code == 404 or '404' in err_msg or 'model_not_found' in err_msg or 'does not exist' in err_msg
+            if is_404:
+                print(f"Model '{model}' not found/accessible on Groq (404). Trying next fallback model...")
+                continue
+            raise e
+    raise last_exception
+
 def ask_ai_deep_search(query):
     # Strict validation
     import re
@@ -162,8 +188,8 @@ def ask_ai_deep_search(query):
     """
     
     try:
-        completion = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+        completion = create_chat_completion_with_fallback(
+            client,
             messages=[
                 {"role": "system", "content": "You are a vulnerability research expert returning raw JSON data."},
                 {"role": "user", "content": prompt}
@@ -181,8 +207,8 @@ def ask_ai_deep_search(query):
 
 def ask_ai_api(query):
     try:
-        completion = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+        completion = create_chat_completion_with_fallback(
+            client,
             messages=[
                 {"role": "system", "content": "You are an AI assistant helping a pentester in a chatbot api can you respond in less than 5 sentances."},
                 {"role": "user", "content": query}
