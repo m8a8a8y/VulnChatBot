@@ -84,8 +84,9 @@ The Flask application exposes a concise API for the frontend JS:
    
 2. **Environment Configuration**:
    VulnChatBot strictly reads your Groq API key from the `GROQ_API_KEY` environment variable for security.
+   You can also specify an optional `GROQ_MODEL` environment variable (defaults to `llama-3.3-70b-versatile` with automatic fallback models such as `llama-3.1-70b-versatile`, `llama3-70b-8192`, `llama3-8b-8192` if the requested model is unavailable).
    *   **Local Development**: Create a `.env` file in the root directory (based on `.env.example`). This file is ignored by git to prevent accidental exposure of your keys.
-   *   **Production Hosting**: Professional hosting environments provide interfaces to set environment variables. Set `GROQ_API_KEY` there to keep it completely hidden from the codebase and the public.
+   *   **Production Hosting**: Professional hosting environments provide interfaces to set environment variables. Set `GROQ_API_KEY` (and optionally `GROQ_MODEL`) there to keep it completely hidden from the codebase and the public.
 
 
 3. **Running the Platform**:

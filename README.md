@@ -28,13 +28,15 @@
     pip install -r requirements.txt
     ```
 
-3.  **Configure API Key**:
+3.  **Configure API Key and Model**:
     Never hardcode your API key. VulnChatBot reads it from the `GROQ_API_KEY` environment variable.
+    Optionally, specify a model with `GROQ_MODEL` (defaults to `llama-3.3-70b-versatile` with automatic fallback models like `llama-3.1-70b-versatile`, `llama3-70b-8192`, `llama3-8b-8192`).
     Local development: Create a `.env` file (use `.env.example` as a template):
     ```env
     GROQ_API_KEY=your_groq_api_key_here
+    GROQ_MODEL=llama-3.3-70b-versatile
     ```
-    Production/Hosting: Set the `GROQ_API_KEY` in your server's environment settings. (e.g. GitHub Secrets, Heroku Config Vars, etc.)
+    Production/Hosting: Set the `GROQ_API_KEY` (and optionally `GROQ_MODEL`) in your server's environment settings. (e.g. GitHub Secrets, Heroku Config Vars, etc.)
 
 4.  **Run the App**:
     *   **Web Version**: `python app.py` (Access at `http://127.0.0.1:5000`)
